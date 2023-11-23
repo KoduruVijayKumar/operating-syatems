@@ -1,0 +1,77 @@
+#include<stdio.h> 
+#include<stdbool.h>
+
+// Function to find the index of the least recently used page in the frame array
+int findLRU(int temp[], int frames) {
+    int lru_index = 0;
+    int lru_time = temp[0];
+
+    for (int i = 1; i < frames; i++) {
+        if (temp[i] < lru_time) {
+            lru_index = i;
+            lru_time = temp[i];
+        }
+    }
+
+    return lru_index;
+}
+
+int main() {
+    int frames;
+    printf("Enter the number of frames: ");
+    scanf("%d", &frames);
+
+    int incomingStreamSize;
+    printf("Enter the size of incoming stream: ");
+    scanf("%d", &incomingStreamSize);
+
+    int incomingStream[incomingStreamSize];
+
+    printf("Enter the incoming stream values:\n");
+    for (int i = 0; i < incomingStreamSize; i++) {
+        printf("Value %d: ", i + 1);
+        scanf("%d", &incomingStream[i]);
+    }
+
+    int pageFaults = 0;
+    int m, n, s, pages;
+
+    pages = incomingStreamSize;
+
+    printf("\nIncoming \t Frame 1 \t Frame 2 \t Frame 3");
+    int temp[frames];
+    for (m = 0; m < frames; m++) {
+        temp[m] = -1;
+    }
+
+    for (m = 0; m < pages; m++) {
+        s = 0;
+
+        for (n = 0; n < frames; n++) {
+            if (incomingStream[m] == temp[n]) {
+                s++;
+                pageFaults--;
+            }
+        }
+        pageFaults++;
+
+        if ((pageFaults <= frames) && (s == 0)) {
+            temp[m] = incomingStream[m];
+        } else if (s == 0) {
+            int lru_index = findLRU(temp, frames);
+            temp[lru_index] = incomingStream[m];
+        }
+
+        printf("\n");
+        printf("%d\t\t\t", incomingStream[m]);
+        for (n = 0; n < frames; n++) {
+            if (temp[n] != -1)
+                printf(" %d\t\t\t", temp[n]);
+            else
+                printf(" - \t\t\t");
+        }
+    }
+
+    printf("\nTotal Page Faults:\t%d\n", pageFaults);
+    return 0;
+}
