@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int n;
+    printf("Enter the number of requests: ");
+    scanf("%d", &n);
+
+    int request[n];
+    printf("Enter the disk requests: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &request[i]);
+    }
+
+    int head;
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+
+    int fcfsTotalHeadMovement = 0;
+    int scanTotalHeadMovement = 0;
+    int cscanTotalHeadMovement = 0;
+    int lookTotalHeadMovement = 0;
+    int clookTotalHeadMovement = 0;
+
+    // FCFS
+    for (int i = 0; i < n; i++) {
+        fcfsTotalHeadMovement += abs(request[i] - head);
+        head = request[i];
+    }
+
+    // SCAN
+    int direction = 1; 
+    int end = 199;     
+
+    for (int i = 0; i < n; i++) {
+        scanTotalHeadMovement += abs(request[i] - head);
+        head = request[i];
+    }
+
+    // C-SCAN
+    for (int i = 0; i < n; i++) {
+        cscanTotalHeadMovement += abs(request[i] - head);
+        head = request[i];
+    }
+
+    // LOOK
+    direction = 1; 
+    for (int i = 0; i < n; i++) {
+        lookTotalHeadMovement += abs(request[i] - head);
+        head = request[i];
+    }
+
+    // C-LOOK
+    for (int i = 0; i < n; i++) {
+        clookTotalHeadMovement += abs(request[i] - head);
+        head = request[i];
+    }
+    printf("FCFS Total Head Movement: %d\n", fcfsTotalHeadMovement);
+    printf("SCAN Total Head Movement: %d\n", scanTotalHeadMovement);
+    printf("C-SCAN Total Head Movement: %d\n", cscanTotalHeadMovement);
+    printf("LOOK Total Head Movement: %d\n", lookTotalHeadMovement);
+    printf("C-LOOK Total Head Movement: %d\n", clookTotalHeadMovement);
+    float avgHeadMovementFCFS = (float)fcfsTotalHeadMovement / n;
+    float avgHeadMovementSCAN = (float)scanTotalHeadMovement / n;
+    float avgHeadMovementCSCAN = (float)cscanTotalHeadMovement / n;
+    float avgHeadMovementLOOK = (float)lookTotalHeadMovement / n;
+    float avgHeadMovementCLOOK = (float)clookTotalHeadMovement / n;
+
+    printf("Average Head Movement (FCFS): %.2f\n", avgHeadMovementFCFS);
+    printf("Average Head Movement (SCAN): %.2f\n", avgHeadMovementSCAN);
+    printf("Average Head Movement (C-SCAN): %.2f\n", avgHeadMovementCSCAN);
+    printf("Average Head Movement (LOOK): %.2f\n", avgHeadMovementLOOK);
+    printf("Average Head Movement (C-LOOK): %.2f\n", avgHeadMovementCLOOK);
+
+    return 0;
+}
