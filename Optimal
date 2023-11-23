@@ -1,0 +1,64 @@
+#include <stdio.h>
+
+int main() {
+    int frames, pages, i, j, page_fault = 0;
+    printf("Enter the number of frames: ");
+    scanf("%d", &frames);
+
+    int frame[frames];
+    for (i = 0; i < frames; i++)
+        frame[i] = 0;
+
+    printf("Enter the number of pages: ");
+    scanf("%d", &pages);
+
+    int page[pages];
+    printf("Enter the reference string: ");
+    for (i = 0; i < pages; i++)
+        scanf("%d", &page[i]);
+
+    printf("PageNo  f1  f2  f3\n");
+    for (i = 0; i < pages; i++) {
+        int isPageFault = 1;
+
+        for (j = 0; j < frames; j++) {
+            if (frame[j] == page[i]) {
+                isPageFault = 0;
+                break;
+            }
+        }
+
+        if (isPageFault) {
+            int replaceIndex = -1;
+            int farthest = i;
+            for (j = 0; j < frames; j++) {
+                int k;
+                for (k = i + 1; k < pages; k++) {
+                    if (frame[j] == page[k]) {
+                        if (k > farthest) {
+                            farthest = k;
+                            replaceIndex = j;
+                        }
+                        break;
+                    }
+                }
+                if (k == pages) {
+                    replaceIndex = j;
+                    break;
+                }
+            }
+
+            frame[replaceIndex] = page[i];
+            page_fault++;
+        }
+
+        printf("%d:\t", page[i]);
+        for (j = 0; j < frames; j++)
+            printf("%d   ", frame[j] == 0 ? 0 : frame[j]);
+        printf("\n");
+    }
+
+    printf("\nTotal page faults: %d\n", page_fault);
+
+    return 0;
+}
